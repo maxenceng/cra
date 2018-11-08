@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Content from '../../common/content/containers/Content'
 
 const BrowseContentPanel = ({ contentMap }) => contentMap.map(({
@@ -27,4 +28,6 @@ BrowseContentPanel.propTypes = {
   })).isRequired,
 }
 
-export default BrowseContentPanel
+const mapStateToProps = ({ updateModel: { contentMap } }) => ({ contentMap })
+
+export default connect(mapStateToProps)(BrowseContentPanel)

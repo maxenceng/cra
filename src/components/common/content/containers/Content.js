@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Details from '../components/Details'
 import Visual from '../components/Visual'
 
+
 const Content = ({
   id,
   src,
@@ -13,7 +14,7 @@ const Content = ({
 }) => (
   <div>
     <Visual src={src} type={type} />
-    {onlyContent && <Details id={id} title={title} />}
+    {!onlyContent && <Details id={id} title={title} />}
   </div>
 )
 

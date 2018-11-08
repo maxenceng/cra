@@ -4,8 +4,7 @@ import { Provider } from 'react-redux'
 import './index.css'
 import Index from './components/App/index'
 import * as serviceWorker from './serviceWorker'
-
-const store = {}
+import store from './store'
 
 const Application = <Provider store={store}><Index /></Provider>
 

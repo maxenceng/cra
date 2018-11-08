@@ -1,3 +1,9 @@
 import { combineReducers } from 'redux'
 
-export default combineReducers({})
+import selected from './selectedReducer'
+import updateModel from './updateModelReducer'
+
+export default combineReducers({
+  selected,
+  updateModel,
+})
