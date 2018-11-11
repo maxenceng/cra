@@ -19,9 +19,13 @@ class Slide extends React.Component {
       title: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       src: PropTypes.string.isRequired,
-    })).isRequired,
+    })),
     displayMode: PropTypes.oneOf(['SHORT', 'FULL_MNG']).isRequired,
     dispatch: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    contentMap: [],
   }
 
   updateSlide = () => {
@@ -40,6 +44,14 @@ class Slide extends React.Component {
     }))
   }
 
+  onDrop = (event) => {
+    event.preventDefault()
+    const contentId = event.dataTransfer.getData('text/html')
+    event.currentTarget.appendChild(document.getElementById(contentId))
+  }
+
+  allowDrop = event => event.preventDefault()
+
   render() {
     const {
       id,
@@ -50,8 +62,9 @@ class Slide extends React.Component {
       displayMode,
     } = this.props
     const content = contentMap.find(line => line.id === contentId)
+    if (!content) return null
     return (
-      <div>
+      <div onDrop={this.onDrop} onDragOver={this.allowDrop}>
         <h1>{id} {title}</h1>
         <p>{txt}</p>
         <Content
@@ -75,6 +88,6 @@ class Slide extends React.Component {
   }
 }
 
-const mapStateToProps = ({ updateModel: { contentMap } }) => ({ contentMap })
+const mapStateToProps = ({ updateModel: { contentMap: { data } } }) => ({ contentMap: data })
 
 export default connect(mapStateToProps)(Slide)

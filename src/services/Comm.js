@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 import axios from 'axios'
 
+/* eslint-disable no-console */
 export default class Comm {
   constructor() {
     this.comm = {}
@@ -47,13 +48,13 @@ export default class Comm {
       .catch(error => callbackErr(error))
   }
 
-  savPres = (presJson, callbackErr) => {
+  savePres = (presJson, callbackErr) => {
     axios.post('/savePres', presJson)
       .then(response => console.log(response))
       .catch(error => callbackErr(error))
   }
 
-  savContent = (contentJson, callbackErr) => {
+  saveContent = (contentJson, callbackErr) => {
     axios.post('/addContent', contentJson)
       .then(response => console.log(response))
       .catch(error => callbackErr(error))
@@ -77,7 +78,7 @@ export default class Comm {
     console.log(this.socket)
     console.log('this.comm.io.uuid')
     console.log(this.comm.io.uuid)
-    this.socket.emit('data_comm', { id: this.comm.io.uuid}, test => console.log(test))
+    this.socket.emit('data_comm', { id: this.comm.io.uuid }, test => console.log(test))
   }
 
   socketConnection = (uuid) => {
@@ -102,14 +103,14 @@ export default class Comm {
   }
 
   pause = () => {
-    this.socket.emit('slidEvent', { CMD: 'PAUSE'})
+    this.socket.emit('slidEvent', { CMD: 'PAUSE' })
   }
 
   begin = () => {
-    this.socket.emit('slidEvent', { CMD: 'BEGIN'})
+    this.socket.emit('slidEvent', { CMD: 'BEGIN' })
   }
 
   end = () => {
-    this.socket.emit('slidEvent', { CMD: 'END'})
+    this.socket.emit('slidEvent', { CMD: 'END' })
   }
 }

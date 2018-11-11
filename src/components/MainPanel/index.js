@@ -5,32 +5,55 @@ import { connect } from 'react-redux'
 import '../../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css'
 import './index.css'
 import BrowseContentPanel from '../BrowseContentPanel/containers/BrowseContentPanel'
-import * as contentMap from '../../source/contentMap.json'
 import Slide from '../common/slide/containers/Slide'
 import Presentation from '../common/presentation/containers/Presentation'
+import Comm from '../../services/Comm'
+import Tools from '../../services/Tools'
 
 import { updateContentMap, updatePresentation } from '../../actions/updateModelAction'
 
-// REMOVE NEXT LINE
-/* eslint-disable-next-line */
 class MainPanel extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
+    cmdPres: PropTypes.string.isRequired,
+    presentation: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+    }),
+  }
+
+  static defaultProps = {
+    presentation: {
+      id: 0,
+      title: 'Error',
+      description: 'Could not fetch presentations',
+    },
+  }
+
+  constructor(props) {
+    super(props)
+    this.comm = new Comm()
   }
 
   componentWillMount = () => {
     const { dispatch } = this.props
-    const content = Object.values(contentMap.default)
-    dispatch(updateContentMap(content))
-    dispatch(updatePresentation({
-      id: 0,
-      title: 'Presentation title',
-      description: 'Presentation description',
-    }))
+    dispatch(updateContentMap())
+    dispatch(updatePresentation(1))
+    const tools = new Tools()
+    const uuid = tools.generateUUID()
+    this.comm.socketConnection(uuid)
+  }
+
+  componentWillReceiveProps = (newProps) => {
+    const { cmdPres } = this.props
+    const { cmdPres: newCmdPres, presentation } = newProps
+    if (cmdPres !== newCmdPres && newCmdPres === 'SAVE_CMD') {
+      this.comm.savePres(presentation, err => console.error(err))
+    }
   }
 
   render() {
-    console.log(contentMap)
     const slideArray = [{
       id: 0,
       title: 'Slide title',
@@ -68,4 +91,12 @@ class MainPanel extends React.Component {
   }
 }
 
-export default connect()(MainPanel)
+const mapStateToProps = ({
+  command: { cmdPres },
+  updateModel: { presentation: { data } },
+}) => ({
+  cmdPres,
+  presentation: data,
+})
+
+export default connect(mapStateToProps)(MainPanel)

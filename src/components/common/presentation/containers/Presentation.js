@@ -46,7 +46,7 @@ Presentation.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
   slideArray: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -55,6 +55,14 @@ Presentation.propTypes = {
   })).isRequired,
 }
 
-const mapStateToProps = ({ updateModel: { presentation } }) => ({ presentation })
+Presentation.defaultProps = {
+  presentation: {
+    id: 0,
+    title: 'Error',
+    description: 'Could not fetch presentations',
+  },
+}
+
+const mapStateToProps = ({ updateModel: { presentation: { data } } }) => ({ presentation: data })
 
 export default connect(mapStateToProps)(Presentation)
