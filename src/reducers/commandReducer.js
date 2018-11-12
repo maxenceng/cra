@@ -1,11 +1,11 @@
-import { COMMAND_PRESENTATION, SEND_NAV_CMD } from '../actions/commandAction'
+import { COMMAND_PRESENTATION } from '../actions/commandAction'
 
 const defaultState = {
   cmdPres: '',
 }
 
 export default (state = defaultState, action) => {
-  switch (action) {
+  switch (action.type) {
     case COMMAND_PRESENTATION: {
       const { cmdPres } = action
       return {
@@ -13,7 +13,6 @@ export default (state = defaultState, action) => {
         cmdPres,
       }
     }
-    case SEND_NAV_CMD: return state
     default: return state
   }
 }

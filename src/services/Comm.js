@@ -13,7 +13,7 @@ export default class Comm {
   toString = () => ''
 
   loadPres = (presId, callback, callbackErr) => {
-    axios.get('/loadPres')
+    axios.get('http://localhost:1337/loadPres')
       .then((data) => {
         const size = Object.keys(data.data).length
         console.log('raw data')
@@ -32,7 +32,7 @@ export default class Comm {
   }
 
   loadContent = (callback, callbackErr) => {
-    axios.get('/resources_list')
+    axios.get('http://localhost:1337/contents')
       .then((data) => {
         //console.log('raw content data')
         //console.log(data.data)
@@ -49,13 +49,13 @@ export default class Comm {
   }
 
   savePres = (presJson, callbackErr) => {
-    axios.post('/savePres', presJson)
+    axios.post('http://localhost:1337/savePres', presJson)
       .then(response => console.log(response))
       .catch(error => callbackErr(error))
   }
 
   saveContent = (contentJson, callbackErr) => {
-    axios.post('/addContent', contentJson)
+    axios.post('http://localhost:1337/contents', contentJson)
       .then(response => console.log(response))
       .catch(error => callbackErr(error))
   }

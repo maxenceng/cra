@@ -6,7 +6,7 @@ import './Slide.css'
 import Content from '../../content/containers/Content'
 import EditMetaSlide from '../components/EditMetaSlide'
 
-import { setSelectedSlide } from '../../../../actions/selectedAction'
+import { updateSlide } from '../../../../actions/updateModelAction'
 
 class Slide extends React.Component {
   static propTypes = {
@@ -28,7 +28,7 @@ class Slide extends React.Component {
     contentMap: [],
   }
 
-  updateSlide = () => {
+  updateSlide = field => ({ target: { value } }) => {
     const {
       id,
       title,
@@ -36,11 +36,12 @@ class Slide extends React.Component {
       contentId,
       dispatch,
     } = this.props
-    dispatch(setSelectedSlide({
+    dispatch(updateSlide({
       id,
       title,
       txt,
       contentId,
+      [field]: value,
     }))
   }
 
@@ -62,25 +63,26 @@ class Slide extends React.Component {
       displayMode,
     } = this.props
     const content = contentMap.find(line => line.id === contentId)
-    if (!content) return null
     return (
       <div onDrop={this.onDrop} onDragOver={this.allowDrop}>
         <h1>{id} {title}</h1>
         <p>{txt}</p>
-        <Content
-          id={contentId}
-          title={content.title}
-          type={content.type}
-          src={content.src}
-          onlyContent
-        />
+        {content && (
+          <Content
+            id={contentId}
+            title={content.title}
+            type={content.type}
+            src={content.src}
+            onlyContent
+          />
+        )}
         {displayMode === 'FULL_MNG'
           ? (
             <EditMetaSlide
               title={title}
               txt={txt}
-              handleChangeTitle={this.updateSlide}
-              handleChangeTxt={this.updateSlide}
+              handleChangeTitle={this.updateSlide('title')}
+              handleChangeTxt={this.updateSlide('txt')}
             />
           ) : null}
       </div>

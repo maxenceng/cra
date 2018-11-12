@@ -1,17 +1,18 @@
 import Comm from '../services/Comm'
 
-export const UPDATE_PRESENTATION_SLIDES = 'UPDATE_PRESENTATION_SLIDES'
 export const ADD_CONTENT = 'ADD_CONTENT'
 export const UPDATE_PRESENTATION_SUCCESS = 'UPDATE_PRESENTATION_SUCCESS'
 export const UPDATE_PRESENTATION_ERROR = 'UPDATE_PRESENTATION_ERROR'
 export const UPDATE_CONTENT_MAP_SUCCESS = 'UPDATE_CONTENT_MAP_SUCCESS'
 export const UPDATE_CONTENT_MAP_ERROR = 'UPDATE_CONTENT_MAP_ERROR'
-export const ADD_SLIDE = 'UPDATE_SLIDE'
+export const ADD_SLIDE = 'ADD_SLIDE'
 export const REMOVE_SLIDE = 'REMOVE_SLIDE'
+export const UPDATE_SLIDE = 'UPDATE_SLIDE'
+export const LOCAL_UPDATE_PRESENTATION = 'LOCAL_UPDATE_PRESENTATION'
 
-export const updatePresentationSlides = presentationSlides => ({
-  type: UPDATE_PRESENTATION_SLIDES,
-  presentationSlides,
+export const localUpdatePresentation = data => ({
+  type: LOCAL_UPDATE_PRESENTATION,
+  data,
 })
 
 export const addSlide = slide => ({
@@ -22,6 +23,11 @@ export const addSlide = slide => ({
 export const removeSlide = slideId => ({
   type: REMOVE_SLIDE,
   slideId,
+})
+
+export const updateSlide = slide => ({
+  type: UPDATE_SLIDE,
+  slide,
 })
 
 export const addContent = content => ({

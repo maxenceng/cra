@@ -1,14 +1,16 @@
 import {
   UPDATE_PRESENTATION_SUCCESS,
   UPDATE_PRESENTATION_ERROR,
-  UPDATE_PRESENTATION_SLIDES,
+  LOCAL_UPDATE_PRESENTATION,
   UPDATE_CONTENT_MAP_SUCCESS,
   UPDATE_CONTENT_MAP_ERROR,
+  UPDATE_SLIDE,
   ADD_CONTENT,
   ADD_SLIDE,
   REMOVE_SLIDE,
 } from '../actions/updateModelAction'
 import Tools from '../services/Tools'
+import { COMMAND_PRESENTATION } from '../actions/commandAction'
 
 const defaultState = {
   presentation: {
@@ -22,12 +24,19 @@ const defaultState = {
     hasError: false,
     error: null,
   },
+  slide: {
+    id: 0,
+    title: '',
+    txt: '',
+    contentId: 0,
+  },
 }
 
 export default (state = defaultState, action) => {
   switch (action.type) {
     case UPDATE_PRESENTATION_SUCCESS: {
       const { data } = action
+      const firstSlide = data.slides.length !== 0 && data.slides[0]
       return {
         ...state,
         presentation: {
@@ -35,6 +44,7 @@ export default (state = defaultState, action) => {
           hasError: false,
           error: null,
         },
+        slide: firstSlide,
       }
     }
     case UPDATE_PRESENTATION_ERROR: {
@@ -50,10 +60,11 @@ export default (state = defaultState, action) => {
     }
     case UPDATE_CONTENT_MAP_SUCCESS: {
       const { data } = action
+      const formattedData = Object.values(data)
       return {
         ...state,
         contentMap: {
-          data,
+          data: formattedData,
           hasError: false,
           error: null,
         },
@@ -70,23 +81,53 @@ export default (state = defaultState, action) => {
         },
       }
     }
-    case UPDATE_PRESENTATION_SLIDES: return state
-    case ADD_SLIDE: {
+    case LOCAL_UPDATE_PRESENTATION: {
+      const { data } = action
+      return {
+        ...state,
+        presentation: {
+          ...state.presentation,
+          data,
+        },
+      }
+    }
+    case UPDATE_SLIDE: {
       const { slide } = action
       return {
         ...state,
-        presentationSlides: [
-          ...state.presentationSlides,
-          slide,
-        ],
+        slide,
+      }
+    }
+    case ADD_SLIDE: {
+      const { slide } = action
+      const { data } = state.presentation
+      return {
+        ...state,
+        presentation: {
+          ...state.presentation,
+          data: {
+            ...data,
+            slides: [...data.slides, slide],
+          },
+        },
       }
     }
     case REMOVE_SLIDE: {
       const { slideId } = action
+      const { data } = state.presentation
       return {
         ...state,
-        presentationSlides: state.presentationSlides.filter(slide => slide.id === slideId),
+        presentation: {
+          ...state.presentation,
+          data: {
+            ...data,
+            slides: data.slides.filter(slide => slide.id !== slideId),
+          },
+        },
       }
+    }
+    case COMMAND_PRESENTATION: {
+      return state
     }
     case ADD_CONTENT: {
       const { content } = action
